@@ -1,0 +1,29 @@
+{
+  "jql": "fixVersion = 'ZZZ 1.4'",
+  "issues": [
+    {
+      "key": "ZZZ-146",
+      "type": "Sub-task",
+      "summary": "Deploy ZZZ 1.4",
+      "status": "Backlog"
+    },
+    {
+      "key": "ZZZ-144",
+      "type": "Sub-task",
+      "summary": "Upgrade to YYY 2.18",
+      "status": "Backlog"
+    },
+    {
+      "key": "ZZZ-143",
+      "type": "Story",
+      "summary": "Deploy ZZZ 1.4",
+      "status": "In Progress"
+    },
+    {
+      "key": "ZZZ-119",
+      "type": "Epic",
+      "summary": "Upgrade everything",
+      "status": "Done"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<title>Heimdall report</title>
+<h1>{{ .PRODUCT_NAME }}</h1>
+<style>
+  body {
+    font-family: sans-serif;
+  }
+</style>
+
+<table>
+  <tr>
+    <td>Version</td>
+    <td>{{ .VERSION }}</td>
+  </tr>
+  <tr>
+    <td>Date</td>
+    <td>{{ .DATE }}</td>
+  </tr>
+  <tr>
+    <td>Heimdall Version</td>
+    <td>{{ .HEIMDALL_VERSION }}</td>
+  </tr>
+</table>
+
+<h2>Checks</h2>
+<table>
+  <tr>
+    <th>Check</th>
+    <th>Result</th>
+    <th>Reference</th>
+    <th>Comment</th>
+  </tr>
+  {{ range .checks }}
+  <tr>
+    <td>{{ .Name }}</td>
+    <td>{{ .Status }}</td>
+    <td>{{ .Reference }}</td>
+    <td></td>
+  </tr>
+  {{ end }}
+</table>

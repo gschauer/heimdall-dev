@@ -1,0 +1,44 @@
+16:00:04 INF Registering plugin=git.CommitPlugin
+16:00:04 INF Registering plugin=github.RepoPlugin
+16:00:04 INF Registering plugin=java.JaCoCoPlugin
+16:00:04 INF Registering plugin=java.JUnitPlugin
+16:00:04 INF Registering plugin=jira.IssuePlugin
+16:00:04 DBG Loading YAML file=data/releases/ZZZ_1.3.yml
+16:00:04 DBG Loading YAML file=data/releases/ZZZ_1.4.yml
+16:00:04 INF Cloning Git repo URL=https://code.local/org/zzz-web.git
+16:00:06 DBG Resolved Git merge base hash=7b5a7fd8e381c5c58cb34fee4422ac76b4b93e1d new=c19c28fc6c4297ea89e1f47619aad7562bf35452 old=f3b1102f81dc677f7e6725b8e41abdbdbc5cfa50
+16:00:06 DBG Loading commits repository=https://code.local/org/zzz-web.git
+16:00:06 DBG Resolve branch(es) for commit hash=c19c28fc6c4297ea89e1f47619aad7562bf35452
+16:00:08 DBG Loading YAML file=data/checks.yml
+
+16:00:08 INF Running check="Line coverage (70%)"
+16:00:08 DBG Evaluating cond="jacoco.line_covered / (jacoco.line_covered + jacoco.line_missed) > 0.7" result=true
+
+16:00:08 INF Running check="Tests passed (100%)"
+16:00:08 WRN Validating result=false rule=range(0|0) val=junit.errors
+16:00:08 WRN Validating result=false rule=range(0|0) val=junit.failures
+16:00:08 WRN Validating result=false rule=range(0|0) val=junit.skipped
+16:00:08 DBG Evaluating cond="junit.tests > 0" result=true
+
+16:00:08 INF Running check="Jira stories closed"
+16:00:08 WRN Evaluating cond="all(filter(jira.issues, {.Type == \"Story\"}), {.Status == \"Done\"})" result=false
+
+16:00:08 INF Running check="Commits refer to Jira tickets"
+16:00:08 WRN Evaluating cond="all(git.commits, {git.validCommitMsg(#)})" result=false
+16:00:08 WRN Evaluating cond="all(map(git.commits, {split(.Message, \" \")[0]}), {# in map(jira.issues, {.Key})})" result=false
+
+16:00:08 INF Running check="Major release (threat model up-to-date)"
+16:00:08 DBG Evaluating cond="split(releases.old.release, '.')[0] == split(releases.new.release, '.')[0] or any(jira.issues, {.Summary contains \"threat model\" && .Status == \"Done\"})" result=true
+
+16:00:08 INF Running check="Deploy from stable branch"
+16:00:08 WRN Evaluating cond="git.branch in [\"main\", \"master\"] or git.branch startsWith \"release/\" or git.branch startsWith \"hotfix/\"" result=false
+
+16:00:08 INF Running check="GitHub Advanced Security"
+16:00:08 DBG Evaluating cond="github.repos.security_and_analysis.advanced_security.status == \"enabled\"" result=true
+
+16:00:08 INF Running check="GitHub secret scanning"
+16:00:08 DBG Evaluating cond="github.repos.security_and_analysis.secret_scanning.status == \"enabled\"" result=true
+
+16:00:08 INF Running check=report
+16:00:08 DBG Evaluating cond=true result=true
+16:00:08 INF Wrote report path=examples/report.html

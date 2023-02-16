@@ -1,0 +1,23 @@
+{
+  "jql": "fixVersion = 'ZZZ 1.3'",
+  "issues": [
+    {
+      "key": "ZZZ-99",
+      "type": "Sub-task",
+      "summary": "Upgrade to YYY 2.17",
+      "status": "Done"
+    },
+    {
+      "key": "ZZZ-96",
+      "type": "Story",
+      "summary": "Rollout ZZZ 1.3",
+      "status": "Done"
+    },
+    {
+      "key": "ZZZ-59",
+      "type": "Story",
+      "summary": "Improve ZZZ code quality",
+      "status": "Done"
+    }
+  ]
+}

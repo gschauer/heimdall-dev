@@ -1,0 +1,4 @@
+name: ZZZ
+release: 1.4
+components:
+  - https://code.local/org/zzz-web.git@development/1.4

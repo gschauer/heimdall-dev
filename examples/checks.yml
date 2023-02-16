@@ -1,0 +1,36 @@
+# Note that these steps evaluate to boolean values.
+# It would be good to support arbitrary output, which is preserved across steps and can be used at a later stage.
+# For example, there could be a template engine, which adds dynamic content into the PDF report.
+steps:
+    # imports can be used to re-use globally applicable checks
+  - import: /etc/heimdall/
+  - name: Line coverage (70%)
+    # The following line evaluates a mathematical expression by resolving values from (nested) JSON objects.
+    condition: jacoco.line_covered / (jacoco.line_covered + jacoco.line_missed) > 0.7
+    type: optional # optional checks show up in the final report but don't "break" the delivery.
+  - name: Tests passed (100%)
+    # This condition is not an expression as above. Instead, it uses another evaluator, namely govalidator.
+    # The syntax is: <json.value> valid: <validator>
+    # whereas <validator> is a built-in function like mail address, URL, semantic version, alphanum, regex, etc.
+    # This feature demonstrates a polyglot evaluator for checks written in any language (Python, Bash, Groovy,...).
+    condition: |
+      junit.errors valid: range(0|0)
+      junit.failures valid: range(0|0)
+      junit.skipped valid: range(0|0)
+      junit.tests > 0
+  - name: Jira stories closed
+    # It's possible to have more complex expressions by combining multiple predicates.
+    condition: all(filter(jira.issues, {.Type == "Story"}), {.Status == "Done"})
+  - name: Commits refer to Jira tickets
+    # The following condition makes use of an "external" Go function, that was registered under the name "split".
+    # Hence, it is possible to call custom Go code in case inline expressions would get too complicated.
+    condition: |
+      all(git.commits, {git.validCommitMsg(#)})
+      all(map(git.commits, {split(.Message, " ")[0]}), {# in map(jira.issues, {.Key})})
+  - name: Deploy from stable branch
+    description: "Deployments from non-protected feature branches are prohibited."
+    condition: git.branch in ["main", "master"] or git.branch startsWith "release/" or git.branch startsWith "hotfix/"
+  - name: GitHub Advanced Security
+    condition: github.repos.security_and_analysis.advanced_security.status == "enabled"
+  - name: GitHub secret scanning
+    condition: github.repos.security_and_analysis.secret_scanning.status == "enabled"
